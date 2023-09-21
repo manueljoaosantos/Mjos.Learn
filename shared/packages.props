@@ -1,0 +1,11 @@
+<Project>
+
+  <PropertyGroup>
+    <Product>Mjos.Learn</Product>
+    <Authors>Manuel Santos</Authors>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/manueljoaosantos/Mjos.Learn.git</RepositoryUrl>
+    <Copyright>Copyright (c) Manuel Santos - 2023</Copyright>
+  </PropertyGroup>
+
+</Project>

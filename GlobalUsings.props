@@ -1,0 +1,49 @@
+<Project>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.AspNetCore.Mvc" />
+    <Using Include="Microsoft.EntityFrameworkCore" />
+    <Using Include="System.Collections.ObjectModel" />
+    <Using Include="MediatR" />
+    <Using Include="FluentValidation" />
+    <Using Include="Dapr.Client" />
+    <Using Include="Confluent.Kafka" />
+    <Using Include="Confluent.SchemaRegistry" />
+    <Using Include="Avro.Specific" />
+    <Using Include="MassTransit" />
+    <Using Include="MassTransit.Definition" />
+    <Using Include="MassTransit.Saga" />
+    <Using Include="MassTransit.KafkaIntegration" />
+    <Using Include="MongoDB.Bson.Serialization.Attributes" />
+    <Using Include="Automatonymous" />
+    <Using Include="GreenPipes" />
+    <Using Include="Mjos.Learn.Core.Domain" />
+    <Using Include="Mjos.Learn.Core.Repository" />
+    <Using Include="Mjos.Learn.Core.Specification" />
+    <Using Include="Mjos.Learn.Core.Helpers" />
+    <Using Include="Mjos.Learn.Core.Helpers.DateTimeHelper" Static="true" />
+    <Using Include="Mjos.Learn.Core.Helpers.GuidHelper" Static="true" />
+    <Using Include="Mjos.Learn.Infrastructure" />
+    <Using Include="Mjos.Learn.Infrastructure.Bus" />
+    <Using Include="Mjos.Learn.Infrastructure.DateTime" />
+    <Using Include="Mjos.Learn.Infrastructure.Controller" />
+    <Using Include="Mjos.Learn.Infrastructure.EfCore" />
+    <Using Include="Mjos.Learn.Infrastructure.ErrorHandler" />
+    <Using Include="Mjos.Learn.Infrastructure.SchemaRegistry" />
+    <Using Include="Mjos.Learn.Infrastructure.SeriLog" />
+    <Using Include="Mjos.Learn.Infrastructure.SeriLog.Extensions" Static="true" />
+    <Using Include="Mjos.Learn.Northwind.IntegrationEvents" />
+  </ItemGroup>
+
+</Project>
