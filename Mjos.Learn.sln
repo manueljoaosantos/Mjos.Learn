@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{CE79C938-707
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShareKernels", "ShareKernels", "{85CE8CC9-F15A-458D-8150-48C95EACE3EB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedContracts", "SharedContracts", "{F5B5B160-0E66-4338-8A44-A61006C2C48F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mjos.Learn.Northwind.IntegrationEvents", "Mjos.Learn.Northwind.IntegrationEvents\Mjos.Learn.Northwind.IntegrationEvents.csproj", "{8D1E99B5-5383-40E8-8381-F00A1DF1B2A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +38,10 @@ Global
 		{6C0EABAC-E55E-4C9C-949F-A459F4060953}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C0EABAC-E55E-4C9C-949F-A459F4060953}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C0EABAC-E55E-4C9C-949F-A459F4060953}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D1E99B5-5383-40E8-8381-F00A1DF1B2A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D1E99B5-5383-40E8-8381-F00A1DF1B2A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D1E99B5-5383-40E8-8381-F00A1DF1B2A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D1E99B5-5383-40E8-8381-F00A1DF1B2A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,5 +50,6 @@ Global
 		{2FE27133-6747-4D91-8492-629742E3BDEC} = {85CE8CC9-F15A-458D-8150-48C95EACE3EB}
 		{CEDF8FD5-C3AE-43C8-9E9B-AA5AA82D9E67} = {85CE8CC9-F15A-458D-8150-48C95EACE3EB}
 		{6C0EABAC-E55E-4C9C-949F-A459F4060953} = {85CE8CC9-F15A-458D-8150-48C95EACE3EB}
+		{8D1E99B5-5383-40E8-8381-F00A1DF1B2A1} = {F5B5B160-0E66-4338-8A44-A61006C2C48F}
 	EndGlobalSection
 EndGlobal
