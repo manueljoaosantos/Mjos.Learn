@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mjos.Learn.Core", "Mjos.Learn.Core\Mjos.Learn.Core.csproj", "{2FE27133-6747-4D91-8492-629742E3BDEC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mjos.Learn.Infrastructure", "Mjos.Learn.Infrastructure\Mjos.Learn.Infrastructure.csproj", "{CEDF8FD5-C3AE-43C8-9E9B-AA5AA82D9E67}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mjos.Learn.Infrastructure.EfCore", "Mjos.Learn.Infrastructure.EfCore\Mjos.Learn.Infrastructure.EfCore.csproj", "{6C0EABAC-E55E-4C9C-949F-A459F4060953}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{CE79C938-7075-453A-BF1E-FCCB6CBF808A}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShareKernels", "ShareKernels", "{85CE8CC9-F15A-458D-8150-48C95EACE3EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2FE27133-6747-4D91-8492-629742E3BDEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FE27133-6747-4D91-8492-629742E3BDEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FE27133-6747-4D91-8492-629742E3BDEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FE27133-6747-4D91-8492-629742E3BDEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEDF8FD5-C3AE-43C8-9E9B-AA5AA82D9E67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEDF8FD5-C3AE-43C8-9E9B-AA5AA82D9E67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEDF8FD5-C3AE-43C8-9E9B-AA5AA82D9E67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEDF8FD5-C3AE-43C8-9E9B-AA5AA82D9E67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C0EABAC-E55E-4C9C-949F-A459F4060953}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C0EABAC-E55E-4C9C-949F-A459F4060953}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C0EABAC-E55E-4C9C-949F-A459F4060953}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C0EABAC-E55E-4C9C-949F-A459F4060953}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2FE27133-6747-4D91-8492-629742E3BDEC} = {85CE8CC9-F15A-458D-8150-48C95EACE3EB}
+		{CEDF8FD5-C3AE-43C8-9E9B-AA5AA82D9E67} = {85CE8CC9-F15A-458D-8150-48C95EACE3EB}
+		{6C0EABAC-E55E-4C9C-949F-A459F4060953} = {85CE8CC9-F15A-458D-8150-48C95EACE3EB}
+	EndGlobalSection
+EndGlobal
