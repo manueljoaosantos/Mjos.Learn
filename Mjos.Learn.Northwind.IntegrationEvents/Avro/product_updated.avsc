@@ -1,0 +1,37 @@
+{
+  "namespace": "Mjos.Learn.Northwind.IntegrationEvents",
+  "type": "record",
+  "name": "ProductUpdated",
+  "fields": [
+    {
+      "name": "ProductId",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "ProductName",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "CategoryId",
+      "type": [ "null", "string" ],
+      "default": ""
+    },
+    {
+      "name": "CategoryName",
+      "type": [ "null", "string" ],
+      "default": ""
+    },
+    {
+      "name": "SupplierId",
+      "type": [ "null", "string" ],
+      "default": ""
+    },
+    {
+      "name": "SupplierName",
+      "type": [ "null", "string" ],
+      "default": ""
+    }
+  ]
+}

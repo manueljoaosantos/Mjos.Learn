@@ -1,0 +1,12 @@
+{
+    "namespace": "Mjos.Learn.Northwind.IntegrationEvents",
+    "type": "record",
+    "name": "ProductDeleted",
+    "fields": [
+        {
+            "name": "Id",
+            "type": "string",
+            "default": ""
+        }
+    ]
+}
