@@ -161,6 +161,25 @@ services:
     networks:
      - northwind-network
 
+# - name: restproxy
+#   image: confluentinc/cp-kafka-rest:latest
+#   env:
+#     - KAFKA_REST_BOOTSTRAP_SERVERS=kafka:9092
+#     - KAFKA_REST_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+#   bindings:
+#     - protocol: http
+#       containerPort: 8082
+#       port: 8082
+  restproxy:
+    image: confluentinc/cp-kafka-rest:latest
+    environment:
+     - KAFKA_REST_BOOTSTRAP_SERVERS=kafka:9092
+     - KAFKA_REST_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+    ports:
+      - "8085:8082" 
+    restart: always
+    networks:
+      - northwind-network          
   #####################################
 
 

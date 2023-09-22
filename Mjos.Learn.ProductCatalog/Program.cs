@@ -1,6 +1,8 @@
 using Mjos.Learn.ProductCatalog;
 using Mjos.Learn.ProductCatalog.Data;
 using Mjos.Learn.ProductCatalog.Domain;
+using Mjos.Learn.ProductCatalog.UseCases;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,27 +22,83 @@ builder.Services
     .AddPersistence("northwind_db", builder.Configuration)
     .AddSwaggerGen()
     .AddSchemeRegistry(builder.Configuration)
-    .AddCdCConsumers()
+    .AddCdCConsumers(builder.Configuration)
     .AddCustomDaprClient()
     .AddHealthChecks()
     .AddDbContextCheck<MainDbContext>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
+//app.UseMiddleware<ExceptionMiddleware>();
+
+//app.UseHttpsRedirection();
+
+//app.UseAuthorization();
+
+//app.MapControllers();
+
+//await WithSeriLog(async () =>
+//{
+//    await app.DoDbMigrationAsync(app.Logger);
+//    await app.DoSeedData(app.Logger);
+
+//    app.Run();
+//});
+
+if (!app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseExceptionHandler("/Error");
 }
+
+//app.UseSerilogRequestLogging();
+
+app.MapGet("/error", () => Results.Problem("An error occurred.", statusCode: 500))
+    .ExcludeFromDescription();
+
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseHttpsRedirection();
+app.UseCustomCors();
+app.UseRouting();
 
-app.UseAuthorization();
+app.UseSwagger();
+app.UseSwaggerUI();
 
+app.MapHealthChecks("/api/healthz");
+app.MapFallback(() => Results.Redirect("/swagger"));
+
+app.MapGet("/api/v1/products",
+    async ([FromHeader(Name = "x-query")] string xQuery, HttpContext httpContext, ISender sender) =>
+    {
+        var queryModel = httpContext.SafeGetListQuery<GetProducts.Query, ListResultModel<ProductDto>>(xQuery);
+        return await sender.Send(queryModel);
+    });
+
+//app.MapGet("/api/v1/products/{id}",
+//    async (Guid id, ISender sender) => await sender.Send(new MutateProduct.GetQuery { Id = id }));
+
+app.MapPost("/api/v1/products",
+    async (MutateProduct.CreateCommand command, ISender sender) => await sender.Send(command));
+
+app.MapPut("/api/v1/products/{id}",
+    async (Guid id, MutateProduct.UpdateCommand command, ISender sender) =>
+        await sender.Send(command with { Id = id }));
+
+app.MapDelete("/api/v1/products/{id}",
+    async (Guid id, ISender sender) => await sender.Send(new MutateProduct.DeleteCommand { Id = id }));
+
+app.MapGet("/api/v1/product-view/{page}/{pageSize}",
+    async (int page, int pageSize, ISender sender) =>
+        await sender.Send(new GetProductView { Page = page, PageSize = pageSize }));
+
+app.MapGet("/api/v1/categories",
+    async (ISender sender) => await sender.Send(new GetCategoriesQuery()));
 app.MapControllers();
-
 await WithSeriLog(async () =>
 {
     await app.DoDbMigrationAsync(app.Logger);

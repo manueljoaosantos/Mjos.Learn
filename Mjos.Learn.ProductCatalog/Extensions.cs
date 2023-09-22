@@ -18,7 +18,7 @@ namespace Mjos.Learn.ProductCatalog
             return services;
         }
 
-        public static IServiceCollection AddCdCConsumers(this IServiceCollection services)
+        public static IServiceCollection AddCdCConsumers(this IServiceCollection services, IConfiguration config)
         {
             /*services.AddKafkaConsumer(o =>
             {
@@ -70,7 +70,7 @@ namespace Mjos.Learn.ProductCatalog
 
                     return result;
                 };
-            });
+            }, config);
 
             return services;
         }

@@ -24,12 +24,12 @@ namespace Mjos.Learn.Infrastructure.Bus
         }
 
         public static IServiceCollection AddKafkaConsumer(this IServiceCollection services,
-            Action<KafkaConsumerConfig> configAction)
+            Action<KafkaConsumerConfig> configAction, IConfiguration config)
         {
             services.AddHostedService<BackGroundKafkaConsumer>();
-
+            var bootstrapServers = config["Kafka:BootstrapServers"];
             services.AddOptions<KafkaConsumerConfig>()
-                .BindConfiguration(KafkaConsumerConfig.Name)
+                .BindConfiguration(bootstrapServers)
                 .Configure(configAction);
 
             return services;
