@@ -1,0 +1,208 @@
+version: "3.7"
+
+services:
+  redis:
+    image: redis:6.2.5-alpine
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - redis_data:/data
+    networks:
+      - northwind-network
+
+  redis-cli:
+    image: redis:6.2.5-alpine
+    command: redis-cli -h redis MONITOR
+    restart: always
+    volumes:
+      - redis-cli_data:/data
+    networks:
+      - northwind-network
+
+  postgres:
+    image: postgres:12.4
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-123456}
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - northwind-network
+
+  zookeeper:
+    image: debezium/zookeeper:latest
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+    restart: always
+    volumes:
+      - zookeeper_conf:/zookeeper/conf
+      - zookeeper_data:/zookeeper/data
+      - zookeeper_txns:/zookeeper/txns    
+    networks:
+      - northwind-network
+
+  kafka:
+    image: debezium/kafka:latest
+    environment:
+      - ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=INTERNAL://:29092,EXTERNAL://:9092
+      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:29092,EXTERNAL://kafka:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_ZOOKEEPER_SESSION_TIMEOUT=6000
+      - KAFKA_RESTART_ATTEMPTS=10
+      - KAFKA_RESTART_DELAY=5
+      - ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL=0
+      - KAFKA_ADVERTISED_HOST_NAME=localhost
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    restart: always
+    volumes:
+      - kafka_config:/kafka/config
+      - kafka_data:/kafka/data
+      - kafka_logs:/kafka/logs
+    networks:
+      - northwind-network
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.3.0
+    hostname: schema-registry
+    container_name: schema-registry
+    environment:
+      - SCHEMA_REGISTRY_HOST_NAME=schema-registry
+      - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081
+      - SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=kafka:29092
+    ports:
+      - "8081:8081"
+    restart: always
+    volumes:
+      - schema-registry_secrets:/etc/schema-registry/secrets
+    networks:
+      - northwind-network
+
+  connector:
+    image: debezium/connect:1.7
+    environment:
+      - BOOTSTRAP_SERVERS=kafka:9092
+      - GROUP_ID=1
+      - CONFIG_STORAGE_TOPIC=connector_configs
+      - OFFSET_STORAGE_TOPIC=connector_offsets
+      - STATUS_STORAGE_TOPIC=connector_statuses
+      - KEY_CONVERTER=io.confluent.connect.avro.AvroConverter
+      - VALUE_CONVERTER=io.confluent.connect.avro.AvroConverter
+      - INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+      - CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+    volumes:
+      - ./_build/debezium/connectors/confluentinc-kafka-connect-jdbc-10.2.1/:/kafka/connect/confluentinc-kafka-connect-jdbc-10.2.1/
+      - ./_build/debezium/connectors/confluentinc-kafka-connect-elasticsearch-11.1.2/:/kafka/connect/confluentinc-kafka-connect-elasticsearch-11.1.2/
+      - connector_data:/kafka/data
+      - connector_logs:/kafka/logs
+      - connector_config:/kafka/config
+    ports:
+      - "8083:8083"
+    restart: always
+    networks:
+      - northwind-network
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+    ports:
+      - "8080:8080"
+    networks:
+      - northwind-network
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+      - "27019:27019"
+    restart: always
+    volumes:
+      - mongo_data:/data/configdb
+      - mongo_db:/data/db
+    networks:
+      - northwind-network
+
+  seq:
+    image: datalust/seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "8341:80"
+      - "5341:5341"
+    restart: always
+    networks:
+      - northwind-network
+
+  pgAdmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - 8082:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.pt
+      PGADMIN_DEFAULT_PASSWORD: qazxsw123.
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+     - northwind-network
+
+  #####################################
+
+
+  productcatalog:
+    image: ${DOCKER_REGISTRY:-ghcr.io/thangchung/northwind-dotnet}/productcatalog:${IMAGE_TAG:-latest}
+#    build:
+#      context: .
+#      dockerfile: Mjos.Learn.ProductCatalog/Dockerfile
+    environment:
+      - ConnectionStrings__northwind_db=Server=postgres;Port=5432;Database=${POSTGRES_DB:-postgres};User Id=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-123456};
+      - Kafka__BootstrapServers=kafka:9092
+      - Kafka__SchemaRegistryUrl=http://schema-registry:8081
+      - Serilog__WriteTo__Args__Name=default
+      - Serilog__WriteTo__Args__serverUrl=http://seq:5341
+      - HealthChecks__ProductCdcUrl=http://connector:8083/connectors/product_outbox_source/config
+    ports:
+      - "5002:80"
+    depends_on:
+      - postgres
+      - seq
+      - kafka
+      - schema-registry
+    restart: always
+    networks:
+      - northwind-network
+volumes:
+  pgadmin_data:
+  postgres_data:  
+  zookeeper_conf:
+  zookeeper_data:
+  zookeeper_txns:
+  redis-cli_data:
+  mongo_data:
+  mongo_db:
+  kafka_config:
+  kafka_data:
+  kafka_logs:
+  schema-registry_secrets:
+  redis_data:
+  connector_data:
+  connector_logs:
+  connector_config:
+  
+networks:
+  northwind-network:

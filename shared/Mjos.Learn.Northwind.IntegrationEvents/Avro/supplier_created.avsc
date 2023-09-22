@@ -1,0 +1,11 @@
+{
+  "namespace": "Mjos.Learn.Northwind.IntegrationEvents",
+  "type": "record",
+  "name": "SupplierCreated",
+  "fields": [
+    {
+      "name": "Id",
+      "type": "string"
+    }
+  ]
+}
