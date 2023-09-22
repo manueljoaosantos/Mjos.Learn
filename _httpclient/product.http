@@ -1,0 +1,45 @@
+@host = http://localhost:5010
+# @host = http://localhost:5002
+
+###
+GET {{host}}/product-api/healthz HTTP/1.1
+content-type: application/json
+
+###
+# GET {{host}}/api/v1/products HTTP/1.1
+# content-type: application/json
+# x-query: {"filters":[],"sorts":["NameDesc"]}
+
+###
+GET {{host}}/product-api/v1/products HTTP/1.1
+content-type: application/json
+x-query: {"filters":[],"sorts":["NameDesc"]}
+
+###
+GET {{host}}/product-api/v1/product-view/1/10 HTTP/1.1
+content-type: application/json
+
+###
+@productId = 3319f76e-efa2-42af-97b3-cbe75d902171
+GET {{host}}/product-api/v1/products/{{productId}} HTTP/1.1
+content-type: application/json
+
+###
+POST {{host}}/product-api/v1/products HTTP/1.1
+content-type: application/json
+
+{
+  "name": "test product 123"
+}
+
+###
+PUT {{host}}/product-api/v1/products/{{productId}} HTTP/1.1
+content-type: application/json
+
+{
+  "name": "test product 123"
+}
+
+###
+DELETE  {{host}}/product-api/v1/products/{{productId}} HTTP/1.1
+content-type: application/json

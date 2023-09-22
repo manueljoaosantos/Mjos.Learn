@@ -1,0 +1,68 @@
+@host = http://localhost:5010
+
+###
+GET {{host}}/sale-api/v1/order-state-machine HTTP/1.1
+content-type: application/json
+
+###
+GET {{host}}/ship-api/v1/order-state-machine HTTP/1.1
+content-type: application/json
+
+###
+# 1: start to creat a new order
+POST {{host}}/sale-api/v1/order HTTP/1.1
+content-type: application/json
+
+{
+    "customerId": "50f51e5f-36c6-4582-b428-ac15d70d9012",
+    "orderDate": "2021-09-15T19:01:55.714942+03:00",
+    "requiredDate": "2021-09-15T19:01:55.714942+03:00",
+    "details": [
+        {
+            "productId": "88a6d251-d2ba-420a-822b-8c68ec9ce4eb",
+            "unitPrice": 1000,
+            "quantity": 1
+        }
+    ],
+    "failedAt": "VALIDATION_FAILED1"
+}
+
+# todo: provide ship information
+###
+@orderId = 14981d8f-db6b-4e31-abbc-8446064d4174
+
+###
+# 2: customer do a payment
+POST {{host}}/sale-api/v1/payment HTTP/1.1
+content-type: application/json
+
+{
+    "orderId": "{{orderId}}",
+    "customerId": "c576e54a-59a1-4a68-9da3-53f96f88d3ff",
+    "transactionId": "c576e54a-59a1-4a68-9da3-53f96f88d3ff",
+    "failedAt": "PAYMENT_FAILED1"
+}
+
+###
+# 3: shipper starts to pick up the order for delivery
+POST {{host}}/ship-api/v1/shipment/{{orderId}}/pick HTTP/1.1
+content-type: application/json
+
+{
+    "orderId": "{{orderId}}",
+    "shipperId": "008765f8-3e46-4491-b3b4-c22fe1da9968",
+    "customerId": "008765f8-3e46-4491-b3b4-c22fe1da9968",
+    "beFailedAt": "Dispatched1"
+}
+
+###
+# 4: shipper delivers the package to the customer
+POST {{host}}/ship-api/v1/shipment/{{orderId}}/delivery HTTP/1.1
+content-type: application/json
+
+{
+    "orderId": "{{orderId}}",
+    "shipperId": "008765f8-3e46-4491-b3b4-c22fe1da9968",
+    "customerId": "008765f8-3e46-4491-b3b4-c22fe1da9968",
+    "beFailedAt": "DELIVERED1"
+}
